@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CandidateRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -21,65 +22,59 @@ class Candidate
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'candidates')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Gender $gender = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $nationality = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $isPassportValid = null;
 
     #[ORM\OneToOne(inversedBy: 'candidate', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Media $passportFile = null;
 
     #[ORM\OneToOne(inversedBy: 'candidate', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Media $curriculumVitae = null;
 
     #[ORM\OneToOne(inversedBy: 'candidate', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Media $profilPicture = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $currentLocation = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $birthAt = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $placeOfBirth = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?bool $isAvailable = null;
 
     #[ORM\ManyToOne(inversedBy: 'candidates')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?JobCategory $jobCategory = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $shortDescription = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $notes = null;
 
     #[ORM\Column]
@@ -88,11 +83,11 @@ class Candidate
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deletedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'candidates')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Experience $experience = null;
 
     #[ORM\OneToMany(mappedBy: 'candidate', targetEntity: Application::class, orphanRemoval: true)]
@@ -101,6 +96,8 @@ class Candidate
     public function __construct()
     {
         $this->applications = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -272,30 +269,6 @@ class Candidate
     public function setPlaceOfBirth(string $placeOfBirth): static
     {
         $this->placeOfBirth = $placeOfBirth;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
 
         return $this;
     }
